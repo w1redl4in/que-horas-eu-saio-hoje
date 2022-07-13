@@ -41,12 +41,7 @@ const Home: NextPage = () => {
 
   return (
     <Center height="100vh">
-      <VStack
-        border="1px solid black"
-        padding="5rem"
-        borderRadius="0.5rem"
-        spacing="1rem"
-      >
+      <VStack padding="5rem" spacing="1rem">
         <Heading>Que horas eu saio hoje?</Heading>
         <Text textAlign="center">
           Hoje é {moment().format("DD/MM/YYYY - HH:mm")}

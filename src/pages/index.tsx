@@ -40,7 +40,7 @@ const Home: NextPage = () => {
   }, [input]);
 
   return (
-    <Center height="100vh">
+    <Center textAlign="center" height="100vh">
       <VStack padding="5rem" spacing="1rem">
         <Heading>Que horas eu saio hoje?</Heading>
         <Text textAlign="center">

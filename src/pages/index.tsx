@@ -5,11 +5,15 @@ import React, { useCallback, useState } from "react";
 import InputMask from "react-input-mask";
 
 const Home: NextPage = () => {
-  const [input, setInput] = useState<string>();
+  const [input, setInput] = useState<string | undefined>(undefined);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = event.target;
+
+      if (value.length < 5) {
+        setInput(undefined);
+      }
 
       if (value.length === 5) {
         setInput(value);
@@ -19,21 +23,35 @@ const Home: NextPage = () => {
   );
 
   const handleCalculateTimeToLeave = useCallback(() => {
-    const value = moment(input, "HH:mm")
+    const dateOrError = moment(input, "HH:mm")
       .add("9", "hours")
       .add("48", "minutes")
       .format("HH:mm");
 
-    console.log("horas", value);
+    if (dateOrError === "Invalid date") return "Insira uma hora válida";
+
+    return `A hora de sair hoje é: ${dateOrError}`;
+  }, [input]);
+
+  const isInputValid = useCallback(() => {
+    if (!input) return false;
+
+    return !input.includes("_");
   }, [input]);
 
   return (
     <Center height="100vh">
-      <VStack spacing="1rem">
+      <VStack
+        border="1px solid black"
+        padding="5rem"
+        borderRadius="0.5rem"
+        spacing="1rem"
+      >
         <Heading>Que horas eu saio hoje?</Heading>
         <Text textAlign="center">
           Hoje é {moment().format("DD/MM/YYYY - HH:mm")}
         </Text>
+
         <Input
           onChange={handleChange}
           textAlign="center"
@@ -43,7 +61,11 @@ const Home: NextPage = () => {
           mask="**:**"
         />
 
-        {handleCalculateTimeToLeave()}
+        {isInputValid() && (
+          <Text>
+            <strong>{handleCalculateTimeToLeave()}</strong>
+          </Text>
+        )}
       </VStack>
     </Center>
   );
